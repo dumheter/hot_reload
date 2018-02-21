@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{A0C385D3-6F6D-4750-8967-967916329949}</ProjectGuid>
+    <RootNamespace>hotreload</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="source\client\client.cpp" />
+    <ClCompile Include="source\core\console.cpp" />
+    <ClCompile Include="source\core\logger.cpp" />
+    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\net\tcp_packet.cpp" />
+    <ClCompile Include="source\net\tcp_socket.cpp" />
+    <ClCompile Include="source\server\server.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\client\client.hpp" />
+    <ClInclude Include="source\core\buffer.hpp" />
+    <ClInclude Include="source\core\console.hpp" />
+    <ClInclude Include="source\core\logger.hpp" />
+    <ClInclude Include="source\core\platform.hpp" />
+    <ClInclude Include="source\core\types.hpp" />
+    <ClInclude Include="source\net\tcp_packet.hpp" />
+    <ClInclude Include="source\net\tcp_socket.hpp" />
+    <ClInclude Include="source\server\server.hpp" />
+    <ClInclude Include="source\thirdparty\chif\chif_net.h" />
+    <ClInclude Include="source\thirdparty\spdlog\async_logger.h" />
+    <ClInclude Include="source\thirdparty\spdlog\common.h" />
+    <ClInclude Include="source\thirdparty\spdlog\details\async_logger_impl.h" />
+    <ClInclude Include="source\thirdparty\spdlog\details\async_log_helper.h" />
+    <ClInclude Include="source\thirdparty\spdlog\details\file_helper.h" />
+    <ClInclude Include="source\thirdparty\spdlog\details\logger_impl.h" />
+    <ClInclude Include="source\thirdparty\spdlog\details\log_msg.h" />
+    <ClInclude Include="source\thirdparty\spdlog\details\mpmc_bounded_q.h" />
+    <ClInclude Include="source\thirdparty\spdlog\details\null_mutex.h" />
+    <ClInclude Include="source\thirdparty\spdlog\details\os.h" />
+    <ClInclude Include="source\thirdparty\spdlog\details\pattern_formatter_impl.h" />
+    <ClInclude Include="source\thirdparty\spdlog\details\registry.h" />
+    <ClInclude Include="source\thirdparty\spdlog\details\spdlog_impl.h" />
+    <ClInclude Include="source\thirdparty\spdlog\fmt\bundled\format.h" />
+    <ClInclude Include="source\thirdparty\spdlog\fmt\bundled\ostream.h" />
+    <ClInclude Include="source\thirdparty\spdlog\fmt\bundled\posix.h" />
+    <ClInclude Include="source\thirdparty\spdlog\fmt\bundled\printf.h" />
+    <ClInclude Include="source\thirdparty\spdlog\fmt\bundled\time.h" />
+    <ClInclude Include="source\thirdparty\spdlog\fmt\fmt.h" />
+    <ClInclude Include="source\thirdparty\spdlog\fmt\ostr.h" />
+    <ClInclude Include="source\thirdparty\spdlog\formatter.h" />
+    <ClInclude Include="source\thirdparty\spdlog\logger.h" />
+    <ClInclude Include="source\thirdparty\spdlog\sinks\android_sink.h" />
+    <ClInclude Include="source\thirdparty\spdlog\sinks\ansicolor_sink.h" />
+    <ClInclude Include="source\thirdparty\spdlog\sinks\base_sink.h" />
+    <ClInclude Include="source\thirdparty\spdlog\sinks\dist_sink.h" />
+    <ClInclude Include="source\thirdparty\spdlog\sinks\file_sinks.h" />
+    <ClInclude Include="source\thirdparty\spdlog\sinks\msvc_sink.h" />
+    <ClInclude Include="source\thirdparty\spdlog\sinks\null_sink.h" />
+    <ClInclude Include="source\thirdparty\spdlog\sinks\ostream_sink.h" />
+    <ClInclude Include="source\thirdparty\spdlog\sinks\sink.h" />
+    <ClInclude Include="source\thirdparty\spdlog\sinks\stdout_sinks.h" />
+    <ClInclude Include="source\thirdparty\spdlog\sinks\syslog_sink.h" />
+    <ClInclude Include="source\thirdparty\spdlog\sinks\wincolor_sink.h" />
+    <ClInclude Include="source\thirdparty\spdlog\sinks\windebug_sink.h" />
+    <ClInclude Include="source\thirdparty\spdlog\spdlog.h" />
+    <ClInclude Include="source\thirdparty\spdlog\tweakme.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
