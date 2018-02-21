@@ -56,6 +56,7 @@ extern "C" {
 #	include <WinSock2.h>
 #	include <WS2tcpip.h>
 # include <winerror.h>
+# include <ws2def.h>
 #elif defined(__linux__) || defined (__APPLE__)
 #	define CHIF_BERKLEY_SOCKET
 #	include <sys/socket.h>
@@ -152,7 +153,7 @@ typedef enum {
           CHIF_RESULT_WOULD_BLOCK,
   /** Remote refused connetion. **/
           CHIF_RESULT_CONNECTION_REFUSED,
-  /** TODO **/
+  /** Failed to use given address **/
           CHIF_RESULT_INVALID_ADDRESS,
   /** There is no file descriptor associated with the socket value. **/
           CHIF_RESULT_INVALID_FILE_DESCRIPTOR,
@@ -162,7 +163,7 @@ typedef enum {
           CHIF_RESULT_SOCKET_ALREADY_IN_USE,
   /** There are no available ports. **/
           CHIF_RESULT_NO_FREE_PORT,
-  /** TODO **/
+  /** Cannot take actions since another is in progress. **/
           CHIF_RESULT_IN_PROGRESS,
   /** Socket is already connected. **/
           CHIF_RESULT_ALREADY_CONNECTED,
@@ -212,9 +213,11 @@ typedef enum {
  */
 typedef enum {
   /** IPv4 address family **/
-          CHIF_ADDRESS_FAMILY_IPV4,
+  CHIF_ADDRESS_FAMILY_IPV4,
   /** IPv6 address family **/
-          CHIF_ADDRESS_FAMILY_IPV6
+  CHIF_ADDRESS_FAMILY_IPV6,
+  /** Unix domain address family **/
+  CHIF_ADDRESS_FAMILY_UNIX
 } chif_address_family;
 
 /**
@@ -352,8 +355,8 @@ chif_net_result chif_net_set_socket_blocking(chif_socket socket,
 
 /**
  *
- * @param address Pointer to a address struct, example: chif_net_address_t server_address{};
- * @param ip_address Example, "127.0.0.1"
+ * @param address Pointer to a address struct, example: chif_net_address server_address{};
+ * @param ip_address String representation of ip address "ddd.ddd.ddd.ddd". Example, "127.0.0.1"
  * @param port
  * @param address_family Example, ipv4
  * @return
@@ -432,6 +435,16 @@ CHIF_INLINE chif_net_result _chif_get_spefic_result_type() {
     return CHIF_RESULT_NOT_A_SOCKET;
   case WSAEAFNOSUPPORT:
     return CHIF_RESULT_INVALID_ADDRESS;
+  case WSAEACCES:
+    return CHIF_RESULT_ACCESS_DENIED;
+  case WSAEADDRINUSE:
+    return CHIF_RESULT_SOCKET_ALREADY_IN_USE;
+  case WSAEADDRNOTAVAIL:
+    return CHIF_RESULT_INVALID_ADDRESS;
+  case WSAEINPROGRESS:
+    return CHIF_RESULT_IN_PROGRESS;
+  case WSAENOBUFS:
+    return CHIF_RESULT_NOT_ENOUGH_SPACE;
   default:
     return CHIF_RESULT_UNKNOWN;
   }
@@ -504,7 +517,7 @@ CHIF_INLINE chif_bool chif_net_startup(void) {
 #if defined(CHIF_WINSOCK2)
   WSADATA winsock_data;
   const int32_t result = WSAStartup(WINSOCK_VERSION, &winsock_data);
-  if (result != 0)
+  if (result != NO_ERROR)
   {
     return CHIF_FALSE;
   }
@@ -532,7 +545,8 @@ CHIF_INLINE chif_net_result chif_net_open_socket(chif_socket *socket_out, chif_n
   if (address_family == CHIF_ADDRESS_FAMILY_IPV6) { _address_family = AF_INET6; }
 
   // Open the socket
-  const chif_socket result_socket = socket(_address_family, _transport_protocol, 0);
+  constexpr unsigned long ANY_IP_PROTOCOL = 0;
+  const chif_socket result_socket = socket(_address_family, _transport_protocol, ANY_IP_PROTOCOL);
 
   if (result_socket == CHIF_INVALID_SOCKET)
     return _chif_get_spefic_result_type();
@@ -546,9 +560,9 @@ CHIF_INLINE chif_net_result chif_net_close_socket(chif_socket *socket) {
   if (*socket != CHIF_INVALID_SOCKET) {
     // Close the socket
 #if defined(CHIF_WINSOCK2)
-    int32_t result = closesocket(*socket);
+    const int result = closesocket(*socket);
 #elif defined(CHIF_BERKLEY_SOCKET)
-    int32_t result = close(*socket);
+    int result = close(*socket);
 #endif
 
     // Set socket to invalid to prevent usage of closed socket.
@@ -571,13 +585,14 @@ CHIF_INLINE chif_net_result chif_net_connect(chif_socket socket, chif_net_addres
 }
 
 CHIF_INLINE chif_net_result chif_net_bind(chif_socket socket, uint16_t port, chif_address_family address_family) {
-  //TODO cannot construct valid addresses on windows
-  struct sockaddr_in address;
-  address.sin_family = address_family;
-  address.sin_port = htons(port);
-  address.sin_addr.s_addr = INADDR_ANY;
+  chif_net_address address{};
+  //TODO address construction without string
+  int result = chif_net_create_address(&address, "0.0.0.0", port, address_family);
 
-  int result = bind(socket, (struct sockaddr *) &address, sizeof(address));
+  if (result == CHIF_SOCKET_ERROR)
+    return _chif_get_spefic_result_type();
+
+  result = bind(socket, (struct sockaddr*) &address, sizeof(address));
 
   if (result == CHIF_SOCKET_ERROR)
     return _chif_get_spefic_result_type();
@@ -586,7 +601,7 @@ CHIF_INLINE chif_net_result chif_net_bind(chif_socket socket, uint16_t port, chi
 }
 
 CHIF_INLINE chif_net_result chif_net_listen(chif_socket socket, uint32_t maximum_backlog) {
-  int result = listen(socket, maximum_backlog);
+  const int result = listen(socket, maximum_backlog);
 
   if (result == CHIF_SOCKET_ERROR)
     return _chif_get_spefic_result_type();
@@ -603,8 +618,7 @@ CHIF_INLINE chif_socket chif_net_accept(chif_socket server_socket, chif_net_addr
 
   //TODO handle errors differently?
   if (client_socket == CHIF_INVALID_SOCKET) {
-    //return _chif_get_spefic_result_type();
-    return CHIF_SOCKET_ERROR;
+    return _chif_get_spefic_result_type();
   }
 
   return client_socket;

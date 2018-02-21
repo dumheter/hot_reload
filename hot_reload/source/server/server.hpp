@@ -9,6 +9,7 @@
 #include "../core/logger.hpp"
 #include "../net/tcp_socket.hpp"
 #include "../net/tcp_packet.hpp"
+#include "../core/buffer.hpp"
 #include <vector>
 
 // ============================================================ //
@@ -45,7 +46,7 @@ namespace lightctrl {
 
     void purge_clients();
 
-
+    int answer_question(const std::string& question);
 
   private:
 

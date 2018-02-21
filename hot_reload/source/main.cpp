@@ -1,17 +1,23 @@
 #include "core/console.hpp"
 #include "server/server.hpp"
 #include "client/client.hpp"
+#include <chrono>
+#include <thread>
+#include <cstdlib>
 
 using namespace lightctrl;
 
-constexpr u16 PORT = 1338;
+constexpr u16 PORT = 1337;
 
 void run_client() {
   Client client("127.0.0.1", PORT);
 
+  std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
   while (true) {
     client.ask();
     client.listen();
+    std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(std::rand()%3000));
   }
 }
 

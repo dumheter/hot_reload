@@ -196,4 +196,9 @@ namespace lightctrl {
     chif_net_set_reuse_addr(m_socket, static_cast<chif_bool>(reuse));
   }
 
+  void Tcp_socket::win_init() {
+    if (chif_net_startup() == CHIF_FALSE)
+      throw socket_exception("failed to init winsock");
+  }
+
 }

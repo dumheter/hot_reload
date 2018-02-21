@@ -221,7 +221,7 @@ namespace lightctrl {
 
     void set_reuse_addr(bool reuse);
 
-    static void win_init() { chif_net_startup(); };
+    static void win_init();
 
     static void win_shutdown() { chif_net_shutdown(); };
 

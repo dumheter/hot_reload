@@ -36,20 +36,24 @@ namespace lightctrl {
     for (auto& client : m_clients) {
       if (client.can_read()) {
         try {
-          Tcp_packet packet(Tcp_packet::Packet_signature::INVALID, 8000);
+          Tcp_packet packet(Tcp_packet::Packet_signature::INVALID, 1024);
           client.read(packet.get_buffer());
-          Console::println("server: read: {} | len: {}, sig: {}",
+          Console::println(Logger::level::warn, "server: read: {} | len: {}, sig: {}",
             packet.get_payload_as_string(),
             packet.get_buffer().size(),
-            packet.get_signature_as_string());
+            packet.get_signature_as_string()
+          );
+
+          const int answer = answer_question(packet.get_payload_as_string());
 
           packet.set_signature(Tcp_packet::Packet_signature::RESPONSE);
-          ssize_t sent_bytes = client.write(packet.get_buffer());
-          Console::println("server: write: {} | len: {}, sig: {}, sent bytes: {}",
+          const Buffer<u8> buffer(std::to_string(answer));
+          packet.set_payload(buffer);
+          const ssize_t sent_bytes = client.write(packet.get_buffer());
+          Console::println("server: answering {}, sent_bytes: {}", 
             packet.get_payload_as_string(),
-            packet.get_buffer().size(),
-            packet.get_signature_as_string(),
-            sent_bytes);
+            sent_bytes
+          );
         }
         catch (socket_exception&) {
           try {
@@ -88,6 +92,19 @@ namespace lightctrl {
         "Client disconnected | There are {} connected devices.",
         m_clients.size());
     }
+  }
+
+  int Server::answer_question(const std::string& question) {
+    std::string num1, num2;
+
+    const unsigned long long comma = question.find(',');
+    if (comma == std::string::npos)
+      throw std::runtime_error("failed to find comma");
+
+    num1 = question.substr(0, comma);
+    num2 = question.substr(comma+1);
+
+    return std::stoi(num1) + std::stoi(num2);
   }
 
 }

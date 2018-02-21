@@ -5,6 +5,7 @@
 
 #include "client.hpp"
 #include "../core/console.hpp"
+#include <cstdlib>
 
 // ============================================================ //
 // Class Implementation
@@ -19,7 +20,10 @@ namespace lightctrl {
   }
 
   void Client::ask() {
-    const std::string question = "What is 1+1";
+    const int num1 = std::rand() % 10 + 1;
+    const int num2 = std::rand() % 10 + 1;
+
+    const std::string question = std::to_string(num1) + "," + std::to_string(num2);
     const Buffer<u8> buffer(question);
     Tcp_packet packet(Tcp_packet::Packet_signature::REQUEST, buffer);
     m_tcp_socket.write(packet.get_buffer());
@@ -33,6 +37,6 @@ namespace lightctrl {
     Tcp_packet packet(Tcp_packet::Packet_signature::INVALID, 1024);
     m_tcp_socket.read(packet.get_buffer());
     
-    Console::println("Got answer {}.", packet.get_payload_as_string());
+    Console::println(Logger::level::warn, "Got answer {}.", packet.get_payload_as_string());
   }
 }
