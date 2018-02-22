@@ -19,6 +19,15 @@ namespace lightctrl {
 
     Console::println(Logger::level::info,
                      "Server up and listening on port {}.", port);
+
+    m_ctx.userdata = &m_ctx_data;
+    cr_plugin_load(m_ctx, quick_maths_dll_path);
+  }
+
+  // ============================================================ //
+
+  Server::~Server() {
+    cr_plugin_close(m_ctx);
   }
 
   // ============================================================ //
@@ -44,10 +53,24 @@ namespace lightctrl {
             packet.get_signature_as_string()
           );
 
-          const int answer = answer_question(packet.get_payload_as_string());
+          // parse the two numbers
+          const std::string question = packet.get_payload_as_string();
+          const unsigned long long comma = question.find(',');
+          if (comma == std::string::npos)
+            throw std::runtime_error("failed to find comma");
+          const std::string num1 = question.substr(0, comma);
+          const std::string num2 = question.substr(comma + 1);
 
+          // load the two numbers into shared memory
+          static_cast<Host_data*>(m_ctx.userdata)->a = std::stoi(num1);
+          static_cast<Host_data*>(m_ctx.userdata)->b = std::stoi(num2);
+
+          // execute dll
+          cr_plugin_update(m_ctx);
+
+          // retrive result and send it away
           packet.set_signature(Tcp_packet::Packet_signature::RESPONSE);
-          const Buffer<u8> buffer(std::to_string(answer));
+          const Buffer<u8> buffer(std::to_string(static_cast<Host_data*>(m_ctx.userdata)->result));
           packet.set_payload(buffer);
           const ssize_t sent_bytes = client.write(packet.get_buffer());
           Console::println("server: answering {}, sent_bytes: {}", 
@@ -80,6 +103,8 @@ namespace lightctrl {
     }
   }
 
+  // ============================================================ //
+
   void Server::purge_clients() {
     const auto size_before = m_clients.size();
     m_clients.erase(std::remove_if(m_clients.begin(), m_clients.end(),
@@ -92,19 +117,6 @@ namespace lightctrl {
         "Client disconnected | There are {} connected devices.",
         m_clients.size());
     }
-  }
-
-  int Server::answer_question(const std::string& question) {
-    std::string num1, num2;
-
-    const unsigned long long comma = question.find(',');
-    if (comma == std::string::npos)
-      throw std::runtime_error("failed to find comma");
-
-    num1 = question.substr(0, comma);
-    num2 = question.substr(comma+1);
-
-    return std::stoi(num1) + std::stoi(num2);
   }
 
 }

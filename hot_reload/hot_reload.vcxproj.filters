@@ -179,5 +179,8 @@
     <ClInclude Include="source\client\client.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="source\thirdparty\cr\cr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

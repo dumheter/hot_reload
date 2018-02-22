@@ -20,13 +20,13 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{A0C385D3-6F6D-4750-8967-967916329949}</ProjectGuid>
-    <RootNamespace>hotreload</RootNamespace>
+    <ProjectGuid>{CF2AE8F9-7505-4CA5-8F58-B3D6579F3B1D}</ProjectGuid>
+    <RootNamespace>quickmaths</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -39,7 +39,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -70,18 +70,6 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>C:\Users\chris\Documents\github\hot_reload\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>quick_maths.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -89,10 +77,14 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>C:\Users\chris\Documents\github\hot_reload\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>quick_maths.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -123,63 +115,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\client\client.cpp" />
-    <ClCompile Include="source\core\console.cpp" />
-    <ClCompile Include="source\core\logger.cpp" />
-    <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\net\tcp_packet.cpp" />
-    <ClCompile Include="source\net\tcp_socket.cpp" />
-    <ClCompile Include="source\server\server.cpp" />
+    <ClCompile Include="source\quick_maths.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\client\client.hpp" />
-    <ClInclude Include="source\core\buffer.hpp" />
-    <ClInclude Include="source\core\console.hpp" />
-    <ClInclude Include="source\core\logger.hpp" />
-    <ClInclude Include="source\core\platform.hpp" />
-    <ClInclude Include="source\core\types.hpp" />
-    <ClInclude Include="source\net\tcp_packet.hpp" />
-    <ClInclude Include="source\net\tcp_socket.hpp" />
-    <ClInclude Include="source\server\server.hpp" />
-    <ClInclude Include="source\thirdparty\chif\chif_net.h" />
     <ClInclude Include="source\thirdparty\cr\cr.h" />
-    <ClInclude Include="source\thirdparty\spdlog\async_logger.h" />
-    <ClInclude Include="source\thirdparty\spdlog\common.h" />
-    <ClInclude Include="source\thirdparty\spdlog\details\async_logger_impl.h" />
-    <ClInclude Include="source\thirdparty\spdlog\details\async_log_helper.h" />
-    <ClInclude Include="source\thirdparty\spdlog\details\file_helper.h" />
-    <ClInclude Include="source\thirdparty\spdlog\details\logger_impl.h" />
-    <ClInclude Include="source\thirdparty\spdlog\details\log_msg.h" />
-    <ClInclude Include="source\thirdparty\spdlog\details\mpmc_bounded_q.h" />
-    <ClInclude Include="source\thirdparty\spdlog\details\null_mutex.h" />
-    <ClInclude Include="source\thirdparty\spdlog\details\os.h" />
-    <ClInclude Include="source\thirdparty\spdlog\details\pattern_formatter_impl.h" />
-    <ClInclude Include="source\thirdparty\spdlog\details\registry.h" />
-    <ClInclude Include="source\thirdparty\spdlog\details\spdlog_impl.h" />
-    <ClInclude Include="source\thirdparty\spdlog\fmt\bundled\format.h" />
-    <ClInclude Include="source\thirdparty\spdlog\fmt\bundled\ostream.h" />
-    <ClInclude Include="source\thirdparty\spdlog\fmt\bundled\posix.h" />
-    <ClInclude Include="source\thirdparty\spdlog\fmt\bundled\printf.h" />
-    <ClInclude Include="source\thirdparty\spdlog\fmt\bundled\time.h" />
-    <ClInclude Include="source\thirdparty\spdlog\fmt\fmt.h" />
-    <ClInclude Include="source\thirdparty\spdlog\fmt\ostr.h" />
-    <ClInclude Include="source\thirdparty\spdlog\formatter.h" />
-    <ClInclude Include="source\thirdparty\spdlog\logger.h" />
-    <ClInclude Include="source\thirdparty\spdlog\sinks\android_sink.h" />
-    <ClInclude Include="source\thirdparty\spdlog\sinks\ansicolor_sink.h" />
-    <ClInclude Include="source\thirdparty\spdlog\sinks\base_sink.h" />
-    <ClInclude Include="source\thirdparty\spdlog\sinks\dist_sink.h" />
-    <ClInclude Include="source\thirdparty\spdlog\sinks\file_sinks.h" />
-    <ClInclude Include="source\thirdparty\spdlog\sinks\msvc_sink.h" />
-    <ClInclude Include="source\thirdparty\spdlog\sinks\null_sink.h" />
-    <ClInclude Include="source\thirdparty\spdlog\sinks\ostream_sink.h" />
-    <ClInclude Include="source\thirdparty\spdlog\sinks\sink.h" />
-    <ClInclude Include="source\thirdparty\spdlog\sinks\stdout_sinks.h" />
-    <ClInclude Include="source\thirdparty\spdlog\sinks\syslog_sink.h" />
-    <ClInclude Include="source\thirdparty\spdlog\sinks\wincolor_sink.h" />
-    <ClInclude Include="source\thirdparty\spdlog\sinks\windebug_sink.h" />
-    <ClInclude Include="source\thirdparty\spdlog\spdlog.h" />
-    <ClInclude Include="source\thirdparty\spdlog\tweakme.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

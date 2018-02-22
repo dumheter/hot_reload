@@ -1,3 +1,6 @@
+// ============================================================ //
+// Headers
+// ============================================================ //
 #include "core/console.hpp"
 #include "server/server.hpp"
 #include "client/client.hpp"
@@ -8,6 +11,10 @@
 using namespace lightctrl;
 
 constexpr u16 PORT = 1337;
+
+// ============================================================ //
+// Functions
+// ============================================================ //
 
 void run_client() {
   Client client("127.0.0.1", PORT);
@@ -28,6 +35,10 @@ void run_server() {
     std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1));
   }
 }
+
+// ============================================================ //
+// Main
+// ============================================================ //
 
 int main(int, char**) {
   Console::set_write_to_file(false);
