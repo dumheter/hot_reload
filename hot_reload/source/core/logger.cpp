@@ -12,7 +12,7 @@
 // Class Implementation
 // ============================================================ //
 
-Logger::Logger(const std::string& name) {
+Logger::Logger(const std::string& name, const bool write_to_file) {
   std::vector<spdlog::sink_ptr> sinks;
 
 #if defined(LIGHTCTRL_PLATFORM_WINDOWS)
@@ -20,9 +20,12 @@ Logger::Logger(const std::string& name) {
 #elif defined(LIGHTCTRL_PLATFORM_LINUX)
   sinks.push_back(std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>());
 #else
-	static_assert(false, "logger not implemented for this platform");
+  static_assert(false, "logger not implemented for this platform");
 #endif
-  sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>("logs/" + name + ".txt", 23, 59));
+
+  if (write_to_file) {
+    sinks.push_back(std::make_shared<spdlog::sinks::daily_file_sink_mt>("logs/" + name + ".txt", 23, 59));
+  }
 
   _logger = std::make_shared<spdlog::logger>(name, begin(sinks), end(sinks));
   spdlog::register_logger(_logger);

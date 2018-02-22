@@ -37,6 +37,19 @@ public:
 
   static void set_level(Logger::level level) { get_logger().set_level(level); };
 
+  static void set_write_to_file(const bool write_to_file) { m_write_to_file = write_to_file; };
+
+  /**
+   * WARNING
+   * as of now, the name identifies the console. If you change the name, a new console will be created.
+   */
+  static void set_name(const std::string& name) { m_name = name; };
+
+private:
+
+  static bool m_write_to_file;
+
+  static std::string m_name;
 };
 
 // ============================================================ //

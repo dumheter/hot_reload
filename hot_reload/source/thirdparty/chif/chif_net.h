@@ -51,6 +51,7 @@ extern "C" {
 
 // Platform detection
 #if defined(_WIN32) || defined(_WIN64) || defined(__MINGW64__)
+# define WIN32_LEAN_AND_MEAN // stop windows.h
 #	define CHIF_WINDOWS
 #	define CHIF_WINSOCK2
 #	include <WinSock2.h>

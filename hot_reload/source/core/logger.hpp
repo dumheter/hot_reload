@@ -25,7 +25,7 @@ public:
       off
       };
 
-  explicit Logger(const std::string& name);
+  explicit Logger(const std::string& name, const bool write_to_file = true);
 
   template <typename ... ARGS>
   void log(const std::string& format, ARGS&& ... args) const;

@@ -11,7 +11,6 @@ constexpr u16 PORT = 1337;
 
 void run_client() {
   Client client("127.0.0.1", PORT);
-
   std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
   while (true) {
@@ -26,12 +25,12 @@ void run_server() {
 
   while (true) {
     server.run();
+    std::this_thread::sleep_for(std::chrono::duration<double, std::milli>(1));
   }
 }
 
 int main(int, char**) {
-  Console::println("Project Hot Reload");
-
+  Console::set_write_to_file(false);
   Console::println("Project Hot Reload");
   Console::println("(s)erver or (c)lient.");
   const std::string answer = Console::readln();
