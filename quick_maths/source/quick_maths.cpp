@@ -34,7 +34,7 @@ int qadd(const int a, const int b) {
 
 CR_EXPORT int cr_main(struct cr_plugin* ctx, enum cr_op operation) {
   assert(ctx);
-  m_data = (Host_data *)ctx->userdata;
+  m_data = static_cast<Host_data*>(ctx->userdata);
   m_version = ctx->version;
   m_failure = ctx->failure;
 
@@ -49,7 +49,8 @@ CR_EXPORT int cr_main(struct cr_plugin* ctx, enum cr_op operation) {
     //shutdown();
     return 0;
   case CR_STEP:
-    ((Host_data*)ctx->userdata)->result = qadd(((Host_data*)ctx->userdata)->a, ((Host_data*)ctx->userdata)->b);
+    static_cast<Host_data*>(ctx->userdata)->result = 
+      qadd(static_cast<Host_data*>(ctx->userdata)->a, static_cast<Host_data*>(ctx->userdata)->b);
     return 0;
   }
 
